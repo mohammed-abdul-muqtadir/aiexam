@@ -1,0 +1,107 @@
+import heapq
+graph = {
+ 'A': {'B': 5, 'C': 3},
+ 'B': {'D': 8, 'E': 6},
+ 'C': {'E': 2, 'F': 4},
+ 'D': {'G': 9},
+ 'E': {'G': 7},
+ 'F': {},
+ 'G': {}
+}
+heuristic = {
+ 'A': 10,
+ 'B': 8,
+ 'C': 7,
+ 'D': 6,
+ 'E': 4,
+ 'F': 3,
+ 'G': 0
+}
+def greedy_best_first_search(graph, start, goal, heuristic):
+    visited = set()
+    priority_queue = [(heuristic[start], start)]
+    came_from = {}
+
+    while priority_queue:
+        h, current_node = heapq.heappop(priority_queue)
+ 
+        if current_node in visited:
+            continue
+ 
+        visited.add(current_node)
+
+        if current_node == goal:
+            path = [current_node]
+            while current_node in came_from:
+                current_node = came_from[current_node]
+                path.insert(0, current_node)
+            return path
+        for neighbor, cost in graph[current_node].items():
+            if neighbor not in visited:
+                heapq.heappush(priority_queue, (heuristic[neighbor], neighbor))
+                came_from[neighbor] = current_node
+    return None
+
+start_node = 'A'
+goal_node = 'G'
+path = greedy_best_first_search(graph, start_node, goal_node, heuristic)
+if path:
+    print(f'Path from {start_node} to {goal_node} is: {"->".join(path)}')
+else:
+    print(f'No path from {start_node} to {goal_node} found.')
+
+
+import nltk
+nltk.download('averaged_perceptron_tagger')
+nltk.download('punkt')
+sentence = "the chef cooks the soup"
+words = nltk.tokenize.word_tokenize(sentence)
+pos_word = nltk.pos_tag(words)
+print(pos_word)
+
+
+import nltk
+nltk.download("punkt")
+nltk.download("averaged_perceptron_tagger")
+sentence = "the chef makes good food"
+
+words = nltk.tokenize.word_tokenize(sentence)
+
+p0s = nltk.pos_tag(words)
+print(p0s)
+
+
+from collections import defaultdict, deque
+class Graph:
+    def __init__(self):
+        self.graph = defaultdict(list)
+    def add_edge(self, u, v):
+        self.graph[u].append(v)
+    def bfs(self, start, goal):
+        visited = set()
+        queue = deque([(start, [])])
+        while queue:
+            node, path = queue.popleft()
+            if node == goal:
+                return path + [node]
+            if node not in visited:
+                visited.add(node)
+                for neighbor in self.graph[node]:
+                    queue.append((neighbor, path + [node]))
+        return None
+g = Graph()
+g.add_edge('A', 'B')
+g.add_edge('A', 'C')
+g.add_edge('B', 'D')
+g.add_edge('B', 'E')
+g.add_edge('C', 'F')
+g.add_edge('E', 'G')
+g.add_edge('F', 'H')
+start_node = 'A'
+goal_node = 'H'
+# Perform BFS search
+path = g.bfs(start_node, goal_node)
+if path:
+    print(f"Path from {start_node} to  {goal_node}: {path}")
+else:
+    print(f"No path found from {start_node} to {goal_node}")
