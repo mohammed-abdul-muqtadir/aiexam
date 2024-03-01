@@ -1,55 +1,30 @@
-import heapq
-graph = {
- 'A': {'B': 5, 'C': 3},
- 'B': {'D': 8, 'E': 6},
- 'C': {'E': 2, 'F': 4},
- 'D': {'G': 9},
- 'E': {'G': 7},
- 'F': {},
- 'G': {}
-}
-heuristic = {
- 'A': 10,
- 'B': 8,
- 'C': 7,
- 'D': 6,
- 'E': 4,
- 'F': 3,
- 'G': 0
-}
-def greedy_best_first_search(graph, start, goal, heuristic):
-    visited = set()
-    priority_queue = [(heuristic[start], start)]
-    came_from = {}
 
-    while priority_queue:
-        h, current_node = heapq.heappop(priority_queue)
- 
-        if current_node in visited:
-            continue
- 
-        visited.add(current_node)
+from sklearn.neural_network import MLPClassifier
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-        if current_node == goal:
-            path = [current_node]
-            while current_node in came_from:
-                current_node = came_from[current_node]
-                path.insert(0, current_node)
-            return path
-        for neighbor, cost in graph[current_node].items():
-            if neighbor not in visited:
-                heapq.heappush(priority_queue, (heuristic[neighbor], neighbor))
-                came_from[neighbor] = current_node
-    return None
+iris = load_iris()
+x = iris.data
+y = iris.target
 
-start_node = 'A'
-goal_node = 'G'
-path = greedy_best_first_search(graph, start_node, goal_node, heuristic)
-if path:
-    print(f'Path from {start_node} to {goal_node} is: {"->".join(path)}')
-else:
-    print(f'No path from {start_node} to {goal_node} found.')
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42
 
+clf = MLPClassifier(hidden_layer_sizes=(100, 50), max_iter=500, random_state=42)
+
+clf.fit(x_train, y_train)
+
+y_pred = clf.predict(x_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+conf_matrix = confusion_matrix(y_test, y_pred)
+classification_rep = classification_report(y_test, y_pred)
+
+print(f"Accuracy: {accuracy}")
+print("Confusion Matrix:")
+print(conf_matrix)
+print("Classification Report:")
+print(classification_rep)
 
 import nltk
 nltk.download('averaged_perceptron_tagger')
@@ -60,15 +35,7 @@ pos_word = nltk.pos_tag(words)
 print(pos_word)
 
 
-import nltk
-nltk.download("punkt")
-nltk.download("averaged_perceptron_tagger")
-sentence = "the chef makes good food"
 
-words = nltk.tokenize.word_tokenize(sentence)
-
-p0s = nltk.pos_tag(words)
-print(p0s)
 
 
 from collections import defaultdict, deque
@@ -105,3 +72,13 @@ if path:
     print(f"Path from {start_node} to  {goal_node}: {path}")
 else:
     print(f"No path found from {start_node} to {goal_node}")
+
+import nltk
+nltk.download("punkt")
+nltk.download("averaged_perceptron_tagger")
+sentence = "the chef makes good food"
+
+words = nltk.tokenize.word_tokenize(sentence)
+
+p0s = nltk.pos_tag(words)
+print(p0s)
