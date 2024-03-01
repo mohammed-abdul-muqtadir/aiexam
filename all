@@ -74,11 +74,17 @@ else:
     print(f"No path found from {start_node} to {goal_node}")
 
 import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download("stopwords")
 nltk.download("punkt")
-nltk.download("averaged_perceptron_tagger")
-sentence = "the chef makes good food"
+text = "natural language is the way that people communicat with each other."
+words = word_tokenize(text)
 
-words = nltk.tokenize.word_tokenize(sentence)
+filtered_words = [word for word in words if word.lower() not in stopwords.words("english")]
+filtered_words = " ".join(filtered_words)
+print(filtered_words)
 
-p0s = nltk.pos_tag(words)
-print(p0s)
+
+
